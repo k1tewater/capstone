@@ -1,0 +1,9 @@
+.progressbar {
+    width: 100%;
+    min-height: 9%;
+    height: 10%;
+}
+
+.unity-progressbar__progress {
+    margin: 10px;
+}

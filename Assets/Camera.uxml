@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/button.uss?fileID=7433441132597879392&amp;guid=cdce3f6d5afd149458763d52a8668cbb&amp;type=3#button" />
+    <Style src="project://database/Assets/progressbar.uss?fileID=7433441132597879392&amp;guid=817aa368e1a8d7a4ba1c11b9e8471a1d&amp;type=3#progressbar" />
+    <ui:VisualElement style="flex-grow: 1; justify-content: center; align-self: stretch; align-items: center; background-color: rgb(255, 255, 255);">
+        <ui:Label tabindex="-1" text="Camera" parse-escape-sequences="true" display-tooltip-when-elided="true" style="bottom: 8%; font-size: 100px;" />
+        <ui:VisualElement style="flex-grow: 0; width: 80%; height: 50%; justify-content: flex-end; align-self: auto; background-color: rgb(0, 0, 0); flex-direction: column;">
+            <ui:ProgressBar value="22" title="downloading..." high-value="100" name="ProgressBar1" class="progressbar" style="font-size: 20px; width: 100%; height: 10%; justify-content: space-around; align-self: auto; align-items: stretch; -unity-slice-scale: 1px;" />
+        </ui:VisualElement>
+        <ui:Button text="Capture" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Capture" class="button-blue" style="top: 10%;" />
+    </ui:VisualElement>
+</ui:UXML>
