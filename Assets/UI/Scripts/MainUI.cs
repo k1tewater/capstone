@@ -22,6 +22,7 @@ public class MainUI : MonoBehaviour
     void ClickTextTo(ClickEvent evt)
     {
         Debug.Log("text to clicked");
+        Managers.ui.SwitchUI(gameObject, "TextUI");
     }
 
     void ClickList(ClickEvent evt)

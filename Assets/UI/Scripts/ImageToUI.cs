@@ -16,11 +16,13 @@ public class ImageToUI : MonoBehaviour
     void ClickCamera(ClickEvent evt)
     {
         Debug.Log("Camera clicked");
+        Managers.ui.SwitchUI(gameObject, "CameraUI");
     }
 
     void ClickFile(ClickEvent evt)
     {
         Debug.Log("File clicked");
+        Managers.ui.SwitchUI(gameObject, "FileUI");
     }
 
     void ClickBack(ClickEvent evt)

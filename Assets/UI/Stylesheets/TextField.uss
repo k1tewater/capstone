@@ -1,0 +1,26 @@
+#unity-text-input {
+    width: 70%;
+    height: 100%;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    border-radius: 30px;
+    padding: 10px;
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+}
+
+#unity-text-element {
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    margin-top: 10px;
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    border-radius: 30px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
