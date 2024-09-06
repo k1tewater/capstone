@@ -16,6 +16,7 @@ public class FileUI : MonoBehaviour
     void ClickUpload(ClickEvent evt)
     {
         Debug.Log("Upload clicked");
+        Managers.ui.LoadImageFromGallery(gameObject, "FileScreen");
     }
 
 }

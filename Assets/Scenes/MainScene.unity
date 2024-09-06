@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 1081597784}
   - component: {fileID: 1081597786}
   m_Layer: 0
-  m_Name: TextTo
+  m_Name: TextUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

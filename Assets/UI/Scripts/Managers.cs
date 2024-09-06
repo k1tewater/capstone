@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
+using UnityEngine;
 
-public static class Managers
+public static class Managers 
 {
     private static UIManager _uiInstance;
     public static UIManager ui
