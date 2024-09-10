@@ -1,32 +1,33 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MainUI : MonoBehaviour
+public class MainUI : UIManager
 {
-    string[] buttonNames;
-    EventCallback<ClickEvent>[] clickEvts;
-    void Awake()
+    
+    protected override void Awake()
     {
         buttonNames = new string[] { "Imageto", "Textto", "List" };
         clickEvts = new EventCallback<ClickEvent>[] { ClickImageTo, ClickTextTo, ClickList };
-        Managers.ui.SetClickEvt(gameObject, buttonNames, clickEvts);
-        GetComponent<UIDocument>().rootVisualElement.style.display = DisplayStyle.Flex;
+        base.Awake();
+        document.rootVisualElement.style.display = DisplayStyle.Flex;
+        
     }
 
     void ClickImageTo(ClickEvent evt)
     {
         Debug.Log("Image to clicked");
-        Managers.ui.SwitchUI(gameObject, "ImageToUI");
+        SwitchUI("ImageToUI");
     }
 
     void ClickTextTo(ClickEvent evt)
     {
         Debug.Log("text to clicked");
-        Managers.ui.SwitchUI(gameObject, "TextUI");
+        SwitchUI("TextToUI");
     }
 
     void ClickList(ClickEvent evt)
     {
         Debug.Log("list clicked");
     }
+
 }

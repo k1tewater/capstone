@@ -1,32 +1,30 @@
+using System.IO;
+using System.Xml.Schema;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ImageToUI : MonoBehaviour
+public class ImageToUI : UIManager
 {
-    string[] buttonNames;
-    EventCallback<ClickEvent>[] clickEvts;
-    void Awake()
+    protected override void Awake()
     {
         buttonNames = new string[] { "Camera", "File" };
         clickEvts = new EventCallback<ClickEvent>[] { ClickCamera, ClickFile };
-        Managers.ui.SetClickEvt(gameObject, buttonNames, clickEvts);
-        GetComponent<UIDocument>().rootVisualElement.style.display = DisplayStyle.None;
+        base.Awake();
+        document.rootVisualElement.style.display = DisplayStyle.None;
     }
 
     void ClickCamera(ClickEvent evt)
     {
+        
         Debug.Log("Camera clicked");
-        Managers.ui.SwitchUI(gameObject, "CameraUI");
+        SwitchUI("CameraUI");
     }
 
     void ClickFile(ClickEvent evt)
     {
         Debug.Log("File clicked");
-        Managers.ui.SwitchUI(gameObject, "FileUI");
+        SwitchUI("FileUI");
     }
-
-    void ClickBack(ClickEvent evt)
-    {
-        Managers.ui.SwitchUI(gameObject, "MainUI");
-    }
+    
 }
