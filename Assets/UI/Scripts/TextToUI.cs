@@ -40,12 +40,21 @@ public class TextToUI : UIManager
         //API호출시작
         APICaller apiCaller = new APICaller();
         StartCoroutine(apiCaller.TextTo(inputTextField.text));
-
-        Label runningLeftTime = document.rootVisualElement.Q<Label>("RunningLeftTime");
+        CameraSetting();
     }
 
     void ClickNo(ClickEvent evt)
     {
         confirmVisualElement.style.display = DisplayStyle.None;
     }
+
+    void CameraSetting()
+    {
+        Camera camera = GameObject.Find("ObjectView").GetComponent<Camera>();
+        var camVisual = document.rootVisualElement.Q<VisualElement>("ObjectViewVisualElement");
+        RenderTexture renderTexture = new RenderTexture((int)camVisual.contentRect.width, (int)camVisual.contentRect.height, 16);
+        camera.targetTexture = renderTexture;
+        camVisual.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(camera.targetTexture));
+    }
+        
 }
