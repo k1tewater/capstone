@@ -1,113 +1,60 @@
-using GLTFast.Schema;
 using System;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static NativeCamera;
 
 public class CameraUI : UIManager
 {
-    private int CaptureCounter = 0; // ÃÔ¿µ Ä«¿îÅÍ
+    APICaller apiCaller;
     protected override void Awake()
     {
         buttonNames = new string[] { "Capture" };
         clickEvts = new EventCallback<ClickEvent>[] { ClickCapture };
         base.Awake();
         document.rootVisualElement.style.display = DisplayStyle.None;
-    }
 
+        apiCaller = new APICaller();
+    }
+    void Update()
+    {
+        if(!apiCaller.task.IsUnityNull() && isRunningAPI && apiCaller.task.data.running_left_time == -1)
+        {
+            ObjectManager.SetVisualElementCamera(document.rootVisualElement.Q<VisualElement>("CameraVisual"));
+            isRunningAPI = false;
+        }
+    }
     void ClickCapture(ClickEvent evt)
     {
         Debug.Log("Capture clicked");
-        if (NativeCamera.IsCameraBusy())
-        {
-            return;
-        }
-        NativeCamera.TakePicture(callbackplz, 2048, true, NativeCamera.PreferredCamera.Front);
-        // Ä«¸Ş¶ó ÃÔ¿µ ÇÔ¼ö È£Ãâ
 
+        NativeCamera.TakePicture(callback, 2048,true, NativeCamera.PreferredCamera.Front);
     }
 
     private void callback(string path)
     {
         var camVisual = document.rootVisualElement.Q<VisualElement>("CameraVisual");
         
-    string SavePath = Application.persistentDataPath;
-
-        NativeCamera.TakePicture((path) =>
+        // ì´¬ì˜ëœ ì´ë¯¸ì§€ì˜ ê²½ë¡œê°€ ìœ íš¨í•œì§€ í™•ì¸
+        if (path != null)
         {
-            // ÃÔ¿µµÈ ÀÌ¹ÌÁöÀÇ °æ·Î°¡ À¯È¿ÇÑÁö È®ÀÎ
-            if (path != null)
+            // ì´¬ì˜ëœ ì´ë¯¸ì§€ë¥¼ 2D í…ìŠ¤ì²˜ë¡œ ë¡œë“œ
+            Texture2D texture = NativeCamera.LoadImageAtPath(path, 2048 ,false);
+            Debug.Log($"height : {texture.height}");
+            if (texture == null)
             {
-                // ÃÔ¿µµÈ ÀÌ¹ÌÁö¸¦ 2D ÅØ½ºÃ³·Î ·Îµå
-                Texture2D texture = NativeCamera.LoadImageAtPath(path, 2048);
-                if (texture == null)
-                {
-                    Debug.Log("Couldn't load texture from " + path);
-                    return;
-                }
-
-                // ÃÔ¿µÇÑ ÀÌ¹ÌÁö¸¦ VisualElementÀÇ ¹é±×¶ó¿îµå·Î ¼³Á¤
-                camVisual.style.backgroundImage = Background.FromTexture2D(texture);
-
-                // ÃÔ¿µÇÑ ÀÌ¹ÌÁö ÀúÀå
-                string time = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-                string galaryPath = SavePath.Substring(0, SavePath.IndexOf("Android")) + "/DCIM/¿øÇÏ´Â Æú´õÀÌ¸§/";
-
-                // Æú´õ°¡ ¾øÀ¸¸é »ı¼º
-                if (!Directory.Exists(galaryPath))
-                {
-                    Directory.CreateDirectory(galaryPath);
-                }
-
-                // ÀÌ¹ÌÁö ÆÄÀÏ·Î ÀúÀå
-                File.WriteAllBytes(galaryPath + "CapturedImage_" + time + CaptureCounter.ToString() + ".png", texture.EncodeToPNG());
-                CaptureCounter++;
+                Debug.Log("Couldn't load texture from " + path);
+                return;
             }
-        }, 2048, true, NativeCamera.PreferredCamera.Front);
-    }
 
-    private void callbackplz(string path)
-    {
-        var camVisual = document.rootVisualElement.Q<VisualElement>("CameraVisual");
-        
-    string SavePath = Application.persistentDataPath;
+            // ì´¬ì˜í•œ ì´ë¯¸ì§€ë¥¼ VisualElementì˜ ë°±ê·¸ë¼ìš´ë“œë¡œ ì„¤ì •
+            camVisual.style.backgroundImage = Background.FromTexture2D(texture);
 
-            // ÃÔ¿µµÈ ÀÌ¹ÌÁöÀÇ °æ·Î°¡ À¯È¿ÇÑÁö È®ÀÎ
-            if (path != null)
-            {
-                // ÃÔ¿µµÈ ÀÌ¹ÌÁö¸¦ 2D ÅØ½ºÃ³·Î ·Îµå
-                Texture2D texture = NativeCamera.LoadImageAtPath(path, 2048);
-                if (texture == null)
-                {
-                    Debug.Log("Couldn't load texture from " + path);
-                    return;
-                }
-
-                // ÃÔ¿µÇÑ ÀÌ¹ÌÁö¸¦ VisualElementÀÇ ¹é±×¶ó¿îµå·Î ¼³Á¤
-                camVisual.style.backgroundImage = Background.FromTexture2D(texture);
-
-                // ÃÔ¿µÇÑ ÀÌ¹ÌÁö ÀúÀå
-                string time = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-                string galaryPath = SavePath.Substring(0, SavePath.IndexOf("Android")) + "/DCIM/¿øÇÏ´Â Æú´õÀÌ¸§/";
-
-                // Æú´õ°¡ ¾øÀ¸¸é »ı¼º
-                if (!Directory.Exists(galaryPath))
-                {
-                    Directory.CreateDirectory(galaryPath);
-                }
-
-                // ÀÌ¹ÌÁö ÆÄÀÏ·Î ÀúÀå
-                File.WriteAllBytes(galaryPath + "CapturedImage_" + time + CaptureCounter.ToString() + ".png", texture.EncodeToPNG());
-                CaptureCounter++;
-            }
+            //API í˜¸ì¶œ
+            APICaller apiCaller = new APICaller();
+            StartCoroutine(apiCaller.ImageTo(texture));
+            isRunningAPI = true;
+        }
     }
 }
-
-            //¿ùµå¿¡ ¿ÀºêÁ§Æ® È­¸é¿¡ ¶ç¿ì´Â¹ı
-            // Camera camera = GameObject.Find("ObjectView").GetComponent<Camera>();
-            // var camVisual = document.rootVisualElement.Q<VisualElement>("CameraVisual");
-            // RenderTexture renderTexture = new RenderTexture((int)camVisual.contentRect.width, (int)camVisual.contentRect.height, 16);
-            // camera.targetTexture = renderTexture;
-            // camVisual.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(camera.targetTexture));
-     

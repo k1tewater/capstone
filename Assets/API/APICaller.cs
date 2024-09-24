@@ -7,19 +7,75 @@ public class APICaller
 {
     private const string apiKey = "tsk_bYdKE9lIq14RjQQVrVO26lPn68GaHr8E4hEy2Tja67g";
     private const string url = "https://api.tripo3d.ai/v2/openapi/task";
+    private const string uploadUrl = "https://api.tripo3d.ai/v2/openapi/upload";
     UnityWebRequest www;
     public Task task;
     byte[] modelBynary;
 
     public IEnumerator TextTo(string prompt)
     {
-        yield return PostTask(prompt);
+        yield return PostTextToTask(prompt);
         yield return SetTask();
         yield return SetModelBynary();
         InstantiateModel();
     }
 
-    private IEnumerator PostTask(string prompt)
+    public IEnumerator ImageTo(Texture2D texture)
+    {
+        yield return PostImageUpload(texture);
+        yield return PostImageToTask();
+        yield return SetTask();
+        yield return SetModelBynary();
+        InstantiateModel();
+    }
+
+
+
+    IEnumerator PostImageUpload(Texture2D tex)
+    {
+        byte[] fileData = tex.EncodeToPNG();
+
+        // MultipartFormDataSection을 사용하여 파일과 데이터 작성
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("file", fileData, "object", "image/png");
+
+        // UnityWebRequest 생성, 헤더에 API 키 추가
+        UnityWebRequest request = UnityWebRequest.Post(uploadUrl, form);
+        request.SetRequestHeader("Authorization", "Bearer " + apiKey);
+
+        // 요청을 보내고 응답을 대기
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Error: " + request.error);
+        }
+        else
+        {
+            Debug.Log("Upload complete! Response: " + request.downloadHandler.text);
+            task = JsonUtility.FromJson<Task>(request.downloadHandler.text);
+        }
+    }
+
+    IEnumerator PostImageToTask()
+    {
+        string data = "{\"type\": \"image_to_model\", \"file\": { \"type\": \"png\", \"file_token\": \"" + task.data.image_token + "\"}}";
+        byte[] dataraw = Encoding.UTF8.GetBytes(data);
+
+        using (www = new UnityWebRequest(url, "POST"))
+        {
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+
+            www.uploadHandler = new UploadHandlerRaw(dataraw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            yield return www.SendWebRequest();
+
+            task = JsonUtility.FromJson<Task>(www.downloadHandler.text);
+            Debug.Log(task.ToString());
+        }
+    }
+    private IEnumerator PostTextToTask(string prompt)
     {
         Debug.Log("Post Task start");
         string data = "{\"type\": \"text_to_model\", \"prompt\": \"" + prompt + "\"}";

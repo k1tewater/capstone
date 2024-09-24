@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public UIDocument document;
     protected string[] buttonNames;
     protected EventCallback<ClickEvent>[] clickEvts;
+    protected bool isRunningAPI = false;
     
     protected virtual void Awake() 
     {

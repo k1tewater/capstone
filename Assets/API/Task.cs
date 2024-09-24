@@ -19,6 +19,7 @@ public class Data
     public string prompt;
     public int running_left_time;
     public Result result;
+    public string image_token;
 }
 
 [System.Serializable]
