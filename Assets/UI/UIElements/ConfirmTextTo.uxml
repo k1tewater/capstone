@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Stylesheets/button.uss?fileID=7433441132597879392&amp;guid=cdce3f6d5afd149458763d52a8668cbb&amp;type=3#button" />
+    <Style src="project://database/Assets/UI/Stylesheets/TextField.uss?fileID=7433441132597879392&amp;guid=1e787f43e84ad584a94d91bf561f9720&amp;type=3#TextField" />
+    <ui:VisualElement style="flex-grow: 1; width: 100%; height: 1087px; background-color: rgba(255, 255, 255, 0); align-items: stretch; justify-content: space-around; align-self: flex-end; opacity: 1; -unity-background-image-tint-color: rgba(255, 255, 255, 0);">
+        <ui:VisualElement style="flex-grow: 1; height: 50%; justify-content: center; align-items: center; align-self: stretch; width: 80%; background-color: rgb(68, 114, 196); opacity: 1; display: flex; scale: 1 1; -unity-background-image-tint-color: rgb(255, 255, 255); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; -unity-text-align: upper-left; flex-basis: 100%; position: relative;">
+            <ui:Label tabindex="-1" text="입력한 값: \n으로 모델을 만드시겠습니까?" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-slice-scale: 1px; scale: 1 1; transform-origin: center; font-size: 50px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

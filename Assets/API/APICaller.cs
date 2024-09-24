@@ -11,9 +11,15 @@ public class APICaller
     public Task task;
     byte[] modelBynary;
 
+    public IEnumerator TextTo(string prompt)
+    {
+        yield return PostTask(prompt);
+        yield return SetTask();
+        yield return SetModelBynary();
+        InstantiateModel();
+    }
 
-
-    public IEnumerator PostTask(string prompt)
+    private IEnumerator PostTask(string prompt)
     {
         Debug.Log("Post Task start");
         string data = "{\"type\": \"text_to_model\", \"prompt\": \"" + prompt + "\"}";
@@ -34,24 +40,32 @@ public class APICaller
         }
     }
 
-    public IEnumerator SetTask()
+    private IEnumerator SetTask()
     {
-        if (task.data.task_id == null)
+        while (true)
         {
-            Debug.Log("task id is null");
-            yield return null;
-        }
+            if (task.data.task_id == null)
+            {
+                Debug.Log("task id is null");
+                yield return null;
+            }
+            using (www = UnityWebRequest.Get(url + "/" + task.data.task_id))
+            {
+                www.SetRequestHeader("Content-Type", "application/json");
+                www.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+                yield return www.SendWebRequest();
+                task = JsonUtility.FromJson<Task>(www.downloadHandler.text);
+            }
 
-        using (www = UnityWebRequest.Get(url + "/" + task.data.task_id))
-        {
-            www.SetRequestHeader("Content-Type", "application/json");
-            www.SetRequestHeader("Authorization", $"Bearer {apiKey}");
-            yield return www.SendWebRequest();
-            task = JsonUtility.FromJson<Task>(www.downloadHandler.text);
+            if (task.data.running_left_time == -1)
+            {
+                Debug.Log("Task completed");
+                break;
+            }
         }
     }
 
-    public IEnumerator SetModel()
+    private IEnumerator SetModelBynary()
     {
         Debug.Log("Set model start");
         string modelURL = task.data.output.model;
@@ -59,41 +73,24 @@ public class APICaller
         {
             www.downloadHandler = new DownloadHandlerBuffer();
             yield return www.SendWebRequest();
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log("modelBynary Setting");
-            modelBynary = www.downloadHandler.data;
-            Debug.Log($"modelBynary length : {modelBynary.Length}");
-        }
-        }
-    }
-
-    public IEnumerator InstantiateModel(string objectName)
-    {
-        yield return SetModel();
-
-        if (modelBynary != null)
-        {
-            var gltf = new GltfImport();
-            Debug.Log("start load gltf binary");
-            yield return gltf.LoadGltfBinary(modelBynary);
-            GameObject modelObj = GameObject.Find(objectName);
-            Debug.Log("start instantiate model");
-            yield return gltf.InstantiateMainSceneAsync(modelObj.transform);
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("modelBynary Setting");
+                modelBynary = www.downloadHandler.data;
+                Debug.Log($"modelBynary length : {modelBynary.Length}");
+            }
         }
     }
-    public async void InstantiateModelPlz()
+    private async void InstantiateModel()
     {
+        Debug.Log("InstantiateModel Start");
         var gltf = new GltfImport();
-        bool success = await gltf.LoadGltfBinary(modelBynary);
-        if (success)
-        {
-            success = await gltf.InstantiateMainSceneAsync(GameObject.Find("Model").transform);
-        }
-
+        await gltf.LoadGltfBinary(modelBynary);
+        await gltf.InstantiateMainSceneAsync(GameObject.Find("Object").transform);
+        Debug.Log("InstantiateModel Done");
     }
 }
