@@ -3,8 +3,8 @@
     <Style src="project://database/Assets/UI/Stylesheets/TextField.uss?fileID=7433441132597879392&amp;guid=1e787f43e84ad584a94d91bf561f9720&amp;type=3#TextField" />
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: center; align-self: auto; align-items: center; background-color: rgb(255, 255, 255); height: 70%;">
         <ui:Label tabindex="-1" text="TextTo" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TextTo" style="bottom: 8%; font-size: 100px;" />
-        <ui:VisualElement name="ObjectViewVisualElement" style="flex-grow: 0; width: 80%; height: 70%; justify-content: flex-end; align-self: auto; background-color: rgb(0, 0, 0); flex-direction: column;">
-            <ui:ProgressBar value="0" high-value="100" name="ApiProgressBar" class="progressbar" style="font-size: 20px; width: 100%; height: auto; justify-content: space-around; align-self: auto; align-items: stretch; -unity-slice-scale: 1px; margin-top: 0; margin-right: 0; margin-bottom: 4%; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; opacity: 1; scale: 1 3;" />
+        <ui:VisualElement name="TextToScreen" style="flex-grow: 0; width: 80%; height: 70%; justify-content: flex-end; align-self: auto; background-color: rgb(0, 0, 0); flex-direction: column;">
+            <ui:ProgressBar value="0" high-value="100" name="TextToBar" class="progressbar" style="font-size: 20px; width: 100%; height: auto; justify-content: space-around; align-self: auto; align-items: stretch; -unity-slice-scale: 1px; margin-top: 0; margin-right: 0; margin-bottom: 4%; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; opacity: 1; scale: 1 3;" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement style="flex-grow: 1; width: 100%; height: 30%; background-color: rgb(255, 255, 255); align-items: center; justify-content: flex-start; align-self: flex-end;">

@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections;
 using UnityEngine.Networking;
 using GLTFast;
+using UnityEngine.UIElements;
 public class APICaller
 {
     private const string apiKey = "tsk_bYdKE9lIq14RjQQVrVO26lPn68GaHr8E4hEy2Tja67g";
@@ -12,21 +13,44 @@ public class APICaller
     public Task task;
     byte[] modelBynary;
 
-    public IEnumerator TextTo(string prompt)
+    public IEnumerator TextTo(string prompt, ProgressBar progressBar)
     {
+        progressBar.lowValue = 0f; progressBar.highValue = 4f;
+
+        progressBar.title = "Sending task to server...";
         yield return PostTextToTask(prompt);
+        progressBar.value++;
+        progressBar.title = "Getting task value...";
         yield return SetTask();
+        progressBar.value++;
+        progressBar.title = "Setting model data to object...";
         yield return SetModelBynary();
+        progressBar.value++;
+        progressBar.title = "Instantiating model...";
         InstantiateModel();
+        progressBar.value = progressBar.highValue;
+        progressBar.title = "Done!";
     }
 
-    public IEnumerator ImageTo(Texture2D texture)
+    public IEnumerator ImageTo(Texture2D texture, ProgressBar progressBar)
     {
+        progressBar.lowValue = 0f; progressBar.highValue = 5f;
+        progressBar.title = "Uploading image to server...";
         yield return PostImageUpload(texture);
+        progressBar.value++;
+        progressBar.title = "Sending task to server...";
         yield return PostImageToTask();
+        progressBar.value++;
+        progressBar.title = "Getting task value...";
         yield return SetTask();
+        progressBar.value++;
+        progressBar.title = "Setting model data to object...";
         yield return SetModelBynary();
+        progressBar.value++;
+        progressBar.title = "Instantiating model...";
         InstantiateModel();
+        progressBar.value = progressBar.highValue;
+        progressBar.title = "Done!";
     }
 
 

@@ -6,7 +6,9 @@ public class TextToUI : UIManager
     VisualElement confirmVisualElement;
     Label inputConfirmLabel;
     TextField inputTextField;
-    ProgressBar apiProgressBar;
+    ProgressBar textToBar;
+    VisualElement textToScreen;
+    APICaller apiCaller;
 
     protected override void Awake()
     {
@@ -18,27 +20,26 @@ public class TextToUI : UIManager
         confirmVisualElement = document.rootVisualElement.Q<VisualElement>("ConfirmVisualElement");
         inputConfirmLabel = document.rootVisualElement.Q<Label>("InputConfirm");
         inputTextField = document.rootVisualElement.Q<TextField>("InputTextField");
-        apiProgressBar = document.rootVisualElement.Q<ProgressBar>("ApiProgressBar");
-        apiProgressBar.lowValue = 0f;
-        apiProgressBar.highValue = 100f;
-        apiProgressBar.style.display = DisplayStyle.None;
+        textToBar = document.rootVisualElement.Q<ProgressBar>("TextToBar");
+        textToScreen = document.rootVisualElement.Q<VisualElement>("TextToScreen");
+        apiCaller = new APICaller();
 
+        textToBar.style.display = DisplayStyle.None;
         confirmVisualElement.style.display = DisplayStyle.None;
     }
 
     void ClickInput(ClickEvent evt)
     {
-        inputConfirmLabel.text = $"입력한 값 : {inputTextField.text}\n모델을 만드시겠습니까?";
+        inputConfirmLabel.text = $"Prompt : {inputTextField.text}\nDo you want create a model with this value?";
         confirmVisualElement.style.display = DisplayStyle.Flex;
     }
     void ClickYes(ClickEvent evt)
     {
         confirmVisualElement.style.display = DisplayStyle.None;
-        apiProgressBar.style.display = DisplayStyle.Flex;
+        textToBar.style.display = DisplayStyle.Flex;
         //API호출시작
-        APICaller apiCaller = new APICaller();
-        StartCoroutine(apiCaller.TextTo(inputTextField.text));
-        CameraSetting();
+        StartCoroutine(apiCaller.TextTo(inputTextField.text, textToBar));
+        ObjectManager.SetVisualElementCamera(textToScreen);
     }
 
     void ClickNo(ClickEvent evt)
@@ -49,10 +50,10 @@ public class TextToUI : UIManager
     void CameraSetting()
     {
         Camera camera = GameObject.Find("ObjectView").GetComponent<Camera>();
-        var camVisual = document.rootVisualElement.Q<VisualElement>("ObjectViewVisualElement");
+        var camVisual = document.rootVisualElement.Q<VisualElement>("TextToScreen");
         RenderTexture renderTexture = new RenderTexture((int)camVisual.contentRect.width, (int)camVisual.contentRect.height, 16);
         camera.targetTexture = renderTexture;
         camVisual.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(camera.targetTexture));
     }
-        
+
 }
