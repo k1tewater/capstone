@@ -8,4 +8,14 @@
         </ui:VisualElement>
         <ui:Button text="Capture" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Capture" class="button-blue" style="top: 10%;" />
     </ui:VisualElement>
+    <ui:VisualElement name="AlarmCamera" style="flex-grow: 0; position: absolute; width: 100%; height: 100%; display: flex; opacity: 1;">
+        <ui:VisualElement name="screen" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0.52); width: 100%; height: 100%;" />
+        <ui:VisualElement name="alarm" style="flex-grow: 0; position: absolute; width: 90%; height: 30%; bottom: 35%; background-color: rgb(255, 255, 255); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; left: 5%; justify-content: space-around; align-items: center; align-self: auto;">
+            <ui:Label tabindex="-1" text="(입력한 값)으로 모델을 만드시겠습니까?" parse-escape-sequences="true" display-tooltip-when-elided="true" name="InputConfirm" style="font-size: 50px;" />
+            <ui:VisualElement style="flex-grow: 0; width: 100%; height: 20%; position: absolute; bottom: 0; align-items: stretch; justify-content: space-around; align-self: auto; flex-direction: row;">
+                <ui:Button text="YES" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Yes" class="button-blue" style="height: 80%; width: 30%; bottom: auto; font-size: 50px;" />
+                <ui:Button text="NO" parse-escape-sequences="true" display-tooltip-when-elided="true" name="No" class="button-blue" style="width: 30%; height: 80%; align-items: stretch; font-size: 50px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>
