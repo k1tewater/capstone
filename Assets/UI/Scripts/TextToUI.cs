@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -42,10 +44,11 @@ public class TextToUI : UIManager
 
     }
 
-    void ClickSave(ClickEvent evt)
+     void ClickSave(ClickEvent evt)
     {
-
+        objectManager.SaveObject();
     }
+
 
     void ClickYes(ClickEvent evt)
     {
@@ -63,15 +66,6 @@ public class TextToUI : UIManager
     void ClickNo(ClickEvent evt)
     {
         confirmVisualElement.style.display = DisplayStyle.None;
-    }
-
-    void CameraSetting()
-    {
-        Camera camera = GameObject.Find("ObjectView").GetComponent<Camera>();
-        var camVisual = document.rootVisualElement.Q<VisualElement>("TextToScreen");
-        RenderTexture renderTexture = new RenderTexture((int)camVisual.contentRect.width, (int)camVisual.contentRect.height, 16);
-        camera.targetTexture = renderTexture;
-        camVisual.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(camera.targetTexture));
     }
 
 }
