@@ -10,6 +10,8 @@
     <ui:VisualElement style="flex-grow: 1; width: 100%; height: 30%; background-color: rgb(255, 255, 255); align-items: center; justify-content: flex-start; align-self: flex-end;">
         <ui:TextField picking-mode="Ignore" value="Input" name="InputTextField" style="width: 80%; height: 20%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
         <ui:Button text="Input" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Input" class="button-blue" style="width: 80%; height: 20%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+        <ui:Button text="Reupload" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Reupload" class="button-blue" style="width: 80%; height: 20%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+        <ui:Button text="Save" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Save" class="button-blue" style="width: 80%; height: 20%; margin-top: 30px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
     </ui:VisualElement>
     <ui:VisualElement name="ConfirmVisualElement" style="flex-grow: 0; position: absolute; width: 100%; height: 100%; display: flex; opacity: 1;">
         <ui:VisualElement name="screen" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0.52); width: 100%; height: 100%;" />

@@ -12,8 +12,8 @@ public class TextToUI : UIManager
 
     protected override void Awake()
     {
-        buttonNames = new string[] { "Input", "Yes", "No" };
-        clickEvts = new EventCallback<ClickEvent>[] { ClickInput, ClickYes, ClickNo };
+        buttonNames = new string[] { "Input", "Reupload", "Save", "Yes", "No" };
+        clickEvts = new EventCallback<ClickEvent>[] { ClickInput, ClickReupload, ClickSave, ClickYes, ClickNo };
         base.Awake();
         document.rootVisualElement.style.display = DisplayStyle.None;
 
@@ -26,6 +26,9 @@ public class TextToUI : UIManager
 
         textToBar.style.display = DisplayStyle.None;
         confirmVisualElement.style.display = DisplayStyle.None;
+
+        GetButton("Reupload").style.display = DisplayStyle.None;
+        GetButton("Save").style.display = DisplayStyle.None;
     }
 
     void ClickInput(ClickEvent evt)
@@ -33,13 +36,28 @@ public class TextToUI : UIManager
         inputConfirmLabel.text = $"Prompt : {inputTextField.text}\nDo you want create a model with this value?";
         confirmVisualElement.style.display = DisplayStyle.Flex;
     }
+
+    void ClickReupload(ClickEvent evt)
+    {
+
+    }
+
+    void ClickSave(ClickEvent evt)
+    {
+
+    }
+
     void ClickYes(ClickEvent evt)
     {
         confirmVisualElement.style.display = DisplayStyle.None;
         textToBar.style.display = DisplayStyle.Flex;
         //API호출시작
         StartCoroutine(apiCaller.TextTo(inputTextField.text, textToBar));
-        ObjectManager.SetVisualElementCamera(textToScreen);
+        objectManager.SetVisualElementCamera(textToScreen);
+
+        GetButton("Input").style.display = DisplayStyle.None;
+        GetButton("Reupload").style.display = DisplayStyle.Flex;
+        GetButton("Save").style.display = DisplayStyle.Flex;
     }
 
     void ClickNo(ClickEvent evt)

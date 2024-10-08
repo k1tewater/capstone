@@ -13,8 +13,8 @@ public class FileUI : UIManager
 
     protected override void Awake()
     {
-        buttonNames = new string[] { "Upload","Yes", "No" };
-        clickEvts = new EventCallback<ClickEvent>[] { ClickUpload , ClickYes, ClickNo };
+        buttonNames = new string[] { "Upload", "Reupload", "Save", "Yes", "No" };
+        clickEvts = new EventCallback<ClickEvent>[] { ClickUpload , ClickReupload, ClickSave, ClickYes, ClickNo };
         base.Awake();
         document.rootVisualElement.style.display = DisplayStyle.None;
 
@@ -25,6 +25,9 @@ public class FileUI : UIManager
 
         fileBar.style.display = DisplayStyle.None;
         alarmfile.style.display = DisplayStyle.None;
+
+        GetButton("Reupload").style.display = DisplayStyle.None;
+        GetButton("Save").style.display = DisplayStyle.None;
     }
 
     void Update()
@@ -32,7 +35,7 @@ public class FileUI : UIManager
         if (!apiCaller.task.IsUnityNull() && isRunningAPI && apiCaller.task.data.running_left_time == -1)
         {
             Debug.Log("FileUI upload done");
-            ObjectManager.SetVisualElementCamera(fileScreen);
+            objectManager.SetVisualElementCamera(fileScreen);
             isRunningAPI = false;
         }
     }
@@ -67,26 +70,38 @@ public class FileUI : UIManager
 
     }
 
+    void ClickReupload(ClickEvent evt)
+    {
+
+    }
+
+    void ClickSave(ClickEvent evt)
+    {
+        
+    }
     void ClickYes(ClickEvent evt)
     {
         StartCoroutine(apiCaller.ImageTo(tex, fileBar));
         fileBar.style.display = DisplayStyle.Flex;
         isRunningAPI = true;
 
-        // È®ÀÎ Ã¢ ¼û±â±â
+        // È®ï¿½ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½ï¿½
         alarmfile.style.display = DisplayStyle.None;
+        GetButton("Upload").style.display = DisplayStyle.None;
+        GetButton("Reupload").style.display = DisplayStyle.Flex;
+        GetButton("Save").style.display = DisplayStyle.Flex;
     }
 
     void ClickNo(ClickEvent evt)
     {
-        // fileScreen¿¡¼­ ÀÌ¹ÌÁö¸¦ Á¦°ÅÇÏ°í ÃÊ±âÈ­
+        // fileScreenï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ê±ï¿½È­
         fileScreen.style.backgroundImage = null;
         tex = null;
 
-        // È®ÀÎ Ã¢ ¼û±â±â
+        // È®ï¿½ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½ï¿½
         alarmfile.style.display = DisplayStyle.None;
 
-        Debug.Log("ÀÌ¹ÌÁö »èÁ¦µÊ.");
+        Debug.Log("ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.");
     }
 
 }

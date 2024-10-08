@@ -11,8 +11,8 @@ public class CameraUI : UIManager
     Texture2D texture;
     protected override void Awake()
     {
-        buttonNames = new string[] { "Capture", "Yes", "No" };
-        clickEvts = new EventCallback<ClickEvent>[] { ClickCapture, ClickYes, ClickNo };
+        buttonNames = new string[] { "Capture", "Reupload", "Save", "Yes", "No" };
+        clickEvts = new EventCallback<ClickEvent>[] { ClickCapture, ClickReupload, ClickSave, ClickYes, ClickNo };
         base.Awake();
         document.rootVisualElement.style.display = DisplayStyle.None;
 
@@ -23,13 +23,16 @@ public class CameraUI : UIManager
 
         cameraBar.style.display = DisplayStyle.None;
         alarmcamera.style.display = DisplayStyle.None;
+
+        GetButton("Reupload").style.display = DisplayStyle.None;
+        GetButton("Save").style.display = DisplayStyle.None;
     }
     void Update()
     {
         if (!apiCaller.task.IsUnityNull() && isRunningAPI && apiCaller.task.data.running_left_time == -1)
         {
             Debug.Log("CameraUI upload done");
-            ObjectManager.SetVisualElementCamera(cameraScreen);
+            objectManager.SetVisualElementCamera(cameraScreen);
             isRunningAPI = false;
         }
     }
@@ -40,6 +43,15 @@ public class CameraUI : UIManager
         NativeCamera.TakePicture(callback, 2048, true, NativeCamera.PreferredCamera.Front);
     }
 
+    void ClickReupload(ClickEvent evt)
+    {
+
+    }
+
+    void ClickSave(ClickEvent evt)
+    {
+        
+    }
     private void callback(string path)
     {
         // 촬영된 이미지의 경로가 유효한지 확인
@@ -67,6 +79,10 @@ public class CameraUI : UIManager
 
         // 확인 창 숨기기
         alarmcamera.style.display = DisplayStyle.None;
+
+        GetButton("Capture").style.display = DisplayStyle.None;
+        GetButton("Reupload").style.display = DisplayStyle.Flex;
+        GetButton("Save").style.display = DisplayStyle.Flex;
     }
 
     void ClickNo(ClickEvent evt)

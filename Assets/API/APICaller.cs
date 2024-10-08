@@ -170,7 +170,7 @@ public class APICaller
         Debug.Log("InstantiateModel Start");
         var gltf = new GltfImport();
         await gltf.LoadGltfBinary(modelBynary);
-        await gltf.InstantiateMainSceneAsync(GameObject.Find("Object").transform);
+        await gltf.InstantiateMainSceneAsync(GameObject.Find("ObjectManager").GetComponent<ObjectManager>().GetObjectTransform());
         Debug.Log("InstantiateModel Done");
     }
 }
