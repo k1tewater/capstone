@@ -28,6 +28,7 @@ public class MainUI : UIManager
     void ClickList(ClickEvent evt)
     {
         Debug.Log("list clicked");
+        SwitchUI("ListUI");
     }
 
 }

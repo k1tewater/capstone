@@ -48,5 +48,7 @@ public class UIManager : MonoBehaviour
         otherObject.GetComponent<UIManager>().document.rootVisualElement.style.display = DisplayStyle.Flex;
         GameObject.Find("UIs").GetComponent<Current>().ui.Push(otherObject);
     }
+
+
     
 }
