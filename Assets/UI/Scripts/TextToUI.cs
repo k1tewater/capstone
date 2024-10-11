@@ -46,7 +46,7 @@ public class TextToUI : UIManager
 
      void ClickSave(ClickEvent evt)
     {
-        objectManager.SaveObject();
+        objectManager.SaveObject(inputTextField.text);
     }
 
 

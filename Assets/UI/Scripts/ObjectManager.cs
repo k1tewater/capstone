@@ -38,15 +38,16 @@ public class ObjectManager : MonoBehaviour
         screen.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(cam.targetTexture));
     }
 
-    public void SaveObject() {
+    public void SaveObject(string fileName) {
         GameObject saveObject = objectViews.Last().Item2.GetChild(0).gameObject;
 
         // 다운로드 폴더 경로 설정
         string downloadsPath = "/storage/emulated/0/Download/";
         
         // .obj 및 .mtl 파일로 저장할 경로 설정
-        string objFilePath = Path.Combine(downloadsPath, "ExportedObject.obj");
-        string mtlFilePath = Path.Combine(downloadsPath, "ExportedObject.mtl");
+        string objFilePath = Path.Combine(downloadsPath, fileName + ".obj");
+        string mtlFilePath = Path.Combine(downloadsPath, fileName + ".mtl");
+        string textureFilePath = Path.Combine(downloadsPath, fileName + ".png");
 
         // MeshFilter 컴포넌트를 가져와서 .obj로 변환
         MeshFilter mf = saveObject.GetComponent<MeshFilter>();
@@ -59,11 +60,18 @@ public class ObjectManager : MonoBehaviour
             string mtlData = GenerateMtlData(renderer.material);
             File.WriteAllText(mtlFilePath, mtlData);
 
+            if (renderer.material.mainTexture != null) {
+                Texture2D texture = renderer.material.mainTexture as Texture2D;
+                byte[] textureData = texture.EncodeToPNG();
+                File.WriteAllBytes(textureFilePath, textureData);
+            }
+
             Debug.Log("Object exported to " + objFilePath);
             Debug.Log("Material exported to " + mtlFilePath);
+            Debug.Log("Texture exported to " + textureFilePath);
         } else {
             Debug.LogError("No MeshFilter or Renderer found on the object.");
-        }
+        
     }
 
     string MeshToObj(MeshFilter mf, string materialName) {
@@ -115,4 +123,5 @@ public class ObjectManager : MonoBehaviour
 
         return sb.ToString();
     }
+}
 }
