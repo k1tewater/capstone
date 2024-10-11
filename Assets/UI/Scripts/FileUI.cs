@@ -7,24 +7,26 @@ public class FileUI : UIManager
 {
 
     APICaller apiCaller;
-    VisualElement fileScreen , alarmfile;
+    VisualElement fileScreen , alarmFile, alarmSavedName;
     ProgressBar fileBar;
     Texture2D tex;
 
     protected override void Awake()
     {
-        buttonNames = new string[] { "Upload", "Reupload", "Save", "Yes", "No" };
-        clickEvts = new EventCallback<ClickEvent>[] { ClickUpload , ClickReupload, ClickSave, ClickYes, ClickNo };
+        buttonNames = new string[] { "Upload", "Reupload", "Save", "Yes", "No", "SaveConfirm","Cancel" };
+        clickEvts = new EventCallback<ClickEvent>[] { ClickUpload , ClickReupload, ClickSave, ClickYes, ClickNo, ClickSaveConfirm, ClickCancel };
         base.Awake();
         document.rootVisualElement.style.display = DisplayStyle.None;
 
         apiCaller = new APICaller();
-        alarmfile = document.rootVisualElement.Q<VisualElement>("AlarmFile");
+        alarmFile = document.rootVisualElement.Q<VisualElement>("AlarmFile");
+        alarmSavedName = document.rootVisualElement.Q<VisualElement>("AlarmSavedName");
         fileScreen = document.rootVisualElement.Q<VisualElement>("FileScreen");
         fileBar = document.rootVisualElement.Q<ProgressBar>("FileBar");
 
         fileBar.style.display = DisplayStyle.None;
-        alarmfile.style.display = DisplayStyle.None;
+        alarmFile.style.display = DisplayStyle.None;
+        alarmSavedName.style.display = DisplayStyle.None;
 
         GetButton("Reupload").style.display = DisplayStyle.None;
         GetButton("Save").style.display = DisplayStyle.None;
@@ -64,7 +66,7 @@ public class FileUI : UIManager
             tex.LoadImage(imageData);
             fileScreen.style.backgroundImage = new StyleBackground(tex);
 
-            alarmfile.style.display = DisplayStyle.Flex;
+            alarmFile.style.display = DisplayStyle.Flex;
         
         });
 
@@ -77,7 +79,7 @@ public class FileUI : UIManager
 
     void ClickSave(ClickEvent evt)
     {
-        
+        alarmSavedName.style.display = DisplayStyle.Flex;
     }
     void ClickYes(ClickEvent evt)
     {
@@ -86,7 +88,7 @@ public class FileUI : UIManager
         isRunningAPI = true;
 
         // Ȯ�� â �����
-        alarmfile.style.display = DisplayStyle.None;
+        alarmFile.style.display = DisplayStyle.None;
         GetButton("Upload").style.display = DisplayStyle.None;
         GetButton("Reupload").style.display = DisplayStyle.Flex;
         GetButton("Save").style.display = DisplayStyle.Flex;
@@ -99,9 +101,18 @@ public class FileUI : UIManager
         tex = null;
 
         // Ȯ�� â �����
-        alarmfile.style.display = DisplayStyle.None;
+        alarmFile.style.display = DisplayStyle.None;
 
         Debug.Log("�̹��� ������.");
     }
 
+    void ClickSaveConfirm(ClickEvent evt)
+    {
+
+    }
+
+    void ClickCancel(ClickEvent evt)
+    {
+        alarmSavedName.style.display = DisplayStyle.None;
+    }
 }

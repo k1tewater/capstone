@@ -6,23 +6,25 @@ using static NativeCamera;
 public class CameraUI : UIManager
 {
     APICaller apiCaller;
-    VisualElement cameraScreen, alarmcamera ;
+    VisualElement cameraScreen, alarmCamera, alarmSavedName;
     ProgressBar cameraBar;
     Texture2D texture;
     protected override void Awake()
     {
-        buttonNames = new string[] { "Capture", "Reupload", "Save", "Yes", "No" };
-        clickEvts = new EventCallback<ClickEvent>[] { ClickCapture, ClickReupload, ClickSave, ClickYes, ClickNo };
+        buttonNames = new string[] { "Capture", "Reupload", "Save", "Yes", "No","SaveConfirm", "Cancel" };
+        clickEvts = new EventCallback<ClickEvent>[] { ClickCapture, ClickReupload, ClickSave, ClickYes, ClickNo, ClickSaveConfirm, ClickCancel };
         base.Awake();
         document.rootVisualElement.style.display = DisplayStyle.None;
 
         apiCaller = new APICaller();
-        alarmcamera = document.rootVisualElement.Q<VisualElement>("AlarmCamera");
+        alarmCamera = document.rootVisualElement.Q<VisualElement>("AlarmCamera");
+        alarmSavedName = document.rootVisualElement.Q<VisualElement>("AlarmSavedName");
         cameraScreen = document.rootVisualElement.Q<VisualElement>("CameraScreen");
         cameraBar = document.rootVisualElement.Q<ProgressBar>("CameraBar");
 
         cameraBar.style.display = DisplayStyle.None;
-        alarmcamera.style.display = DisplayStyle.None;
+        alarmCamera.style.display = DisplayStyle.None;
+        alarmSavedName.style.display = DisplayStyle.None;
 
         GetButton("Reupload").style.display = DisplayStyle.None;
         GetButton("Save").style.display = DisplayStyle.None;
@@ -50,7 +52,7 @@ public class CameraUI : UIManager
 
     void ClickSave(ClickEvent evt)
     {
-        
+        alarmSavedName.style.display = DisplayStyle.Flex;
     }
     private void callback(string path)
     {
@@ -68,7 +70,7 @@ public class CameraUI : UIManager
 
             // 촬영한 이미지를 VisualElement의 백그라운드로 설정
             cameraScreen.style.backgroundImage = Background.FromTexture2D(texture);
-            alarmcamera.style.display = DisplayStyle.Flex;
+            alarmCamera.style.display = DisplayStyle.Flex;
         } 
     }
     void ClickYes(ClickEvent evt)
@@ -78,7 +80,7 @@ public class CameraUI : UIManager
         isRunningAPI = true;
 
         // 확인 창 숨기기
-        alarmcamera.style.display = DisplayStyle.None;
+        alarmCamera.style.display = DisplayStyle.None;
 
         GetButton("Capture").style.display = DisplayStyle.None;
         GetButton("Reupload").style.display = DisplayStyle.Flex;
@@ -92,8 +94,17 @@ public class CameraUI : UIManager
         texture = null;
 
         // 확인 창 숨기기
-        alarmcamera.style.display = DisplayStyle.None;
+        alarmCamera.style.display = DisplayStyle.None;
 
         Debug.Log("이미지 삭제됨.");
+    }
+    void ClickSaveConfirm(ClickEvent evt)
+    {
+
+    }
+
+    void ClickCancel(ClickEvent evt)
+    {
+        alarmSavedName.style.display = DisplayStyle.None;
     }
 }
