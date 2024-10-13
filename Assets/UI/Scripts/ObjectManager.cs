@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class ObjectManager : MonoBehaviour
 {
-    List<(Camera, Transform)> objectViews;
+    public List<(Camera, Transform)> objectViews;
     GameObject objectViewPrefab;
 
     private void Awake() {
@@ -38,20 +43,28 @@ public class ObjectManager : MonoBehaviour
         screen.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(cam.targetTexture));
     }
 
-    public void SaveObject(string fileName) {
-        GameObject saveObject = objectViews.Last().Item2.GetChild(0).gameObject;
+    private void RenameObject(GameObject obj, string fileName)
+    {
+        obj.name = fileName+"3D";
+        obj.GetComponent<MeshRenderer>().materials[0].name = fileName + "3D";
+        obj.GetComponent<MeshRenderer>().material.mainTexture.name = fileName + "3D";
+        obj.GetComponent<MeshFilter>().mesh.name = fileName + "3D";
+    }
 
+    public void SaveObjectFile(string fileName) {
+        GameObject saveObject = objectViews.Last().Item2.GetChild(0).gameObject;
+        RenameObject(saveObject, fileName);
         // 다운로드 폴더 경로 설정
         string downloadsPath = "/storage/emulated/0/Download/";
         
         // .obj 및 .mtl 파일로 저장할 경로 설정
-        string objFilePath = Path.Combine(downloadsPath, fileName + ".obj");
-        string mtlFilePath = Path.Combine(downloadsPath, fileName + ".mtl");
-        string textureFilePath = Path.Combine(downloadsPath, fileName + ".png");
+        string objFilePath = Path.Combine(downloadsPath, fileName + "3D.obj");
+        string mtlFilePath = Path.Combine(downloadsPath, fileName + "3D.mtl");
+        string textureFilePath = Path.Combine(downloadsPath, fileName + "3D.png");
 
         // MeshFilter 컴포넌트를 가져와서 .obj로 변환
         MeshFilter mf = saveObject.GetComponent<MeshFilter>();
-        Renderer renderer = saveObject.GetComponent<Renderer>();
+        MeshRenderer renderer = saveObject.GetComponent<MeshRenderer>();
 
         if (mf != null && renderer != null) {
             string objData = MeshToObj(mf, renderer.material.name);
@@ -60,9 +73,9 @@ public class ObjectManager : MonoBehaviour
             string mtlData = GenerateMtlData(renderer.material);
             File.WriteAllText(mtlFilePath, mtlData);
 
-            if (renderer.material.mainTexture != null) {
-                Texture2D texture = renderer.material.mainTexture as Texture2D;
-                byte[] textureData = texture.EncodeToPNG();
+            if (renderer.material.mainTexture != null && renderer.material.mainTexture is Texture2D texture) {
+                Texture2D copyTexture = duplicateTexture(texture);
+                byte[] textureData = copyTexture.EncodeToPNG();
                 File.WriteAllBytes(textureFilePath, textureData);
             }
 
@@ -71,9 +84,26 @@ public class ObjectManager : MonoBehaviour
             Debug.Log("Texture exported to " + textureFilePath);
         } else {
             Debug.LogError("No MeshFilter or Renderer found on the object.");
-        
     }
+    Texture2D duplicateTexture(Texture2D source)
+    {
+        RenderTexture renderTex = RenderTexture.GetTemporary(
+                    source.width,
+                    source.height,
+                    0,
+                    RenderTextureFormat.Default,
+                    RenderTextureReadWrite.Linear);
 
+        Graphics.Blit(source, renderTex);
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = renderTex;
+        Texture2D readableText = new Texture2D(source.width, source.height);
+        readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
+        readableText.Apply();
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(renderTex);
+        return readableText;
+    }
     string MeshToObj(MeshFilter mf, string materialName) {
         Mesh m = mf.mesh;
         StringBuilder sb = new StringBuilder();
@@ -123,5 +153,5 @@ public class ObjectManager : MonoBehaviour
 
         return sb.ToString();
     }
-}
-}
+    }
+    }

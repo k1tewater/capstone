@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class ListUI : UIManager
 {
-    
+
     ListView List;
     // Start is called before the first frame update
     protected override void Awake()
@@ -18,43 +18,43 @@ public class ListUI : UIManager
     }
     void Start()
     {
-        // ¾À¿¡¼­ ¸ðµç GameObject¸¦ Ã£½À´Ï´Ù.(Áö±ÝÀº ¸ðµç ¿ÀºêÁ§Æ®¸¦ Ã£´Â°É·Î ÇØ³ù´Âµ¥ ¿©±âºÎºÐ ¼öÁ¤ÇØ¼­ ÀúÀåÇÑ ¿ÀºêÁ§Æ® ºÒ·¯¿À´Â ºÎºÐÀ¸·Î ¼öÁ¤ÇÏ¸é µÉµí)
+        // ì”¬ì—ì„œ ëª¨ë“  GameObjectë¥¼ ì°¾ìŠµë‹ˆë‹¤.(ì§€ê¸ˆì€ ëª¨ë“  ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ëŠ”ê±¸ë¡œ í•´ë†¨ëŠ”ë° ì—¬ê¸°ë¶€ë¶„ ìˆ˜ì •í•´ì„œ ì €ìž¥í•œ ì˜¤ë¸Œì íŠ¸ ë¶ˆëŸ¬ì˜¤ëŠ” ë¶€ë¶„ìœ¼ë¡œ ìˆ˜ì •í•˜ë©´ ë ë“¯)
+        // ì €ìž¥ë˜ì–´ìžˆëŠ”íŒŒì¼ > ê²Œìž„ì˜¤ë¸Œì íŠ¸ ìƒì„± > ì˜¤ë¸Œì íŠ¸,ì¹´ë©”ë¼ ë°°ì¹˜
         GameObject[] objects = FindObjectsOfType<GameObject>();
 
-        // UI °»½Å
+        // UI ê°±ì‹ 
         UpdateUI(new List<GameObject>(objects));
     }
 
-    // ListViewÀÇ °¢ ¾ÆÀÌÅÛÀ» Ç¥½ÃÇÒ ÅÛÇÃ¸´ ¼³Á¤
+    // ListViewì˜ ê° ì•„ì´í…œì„ í‘œì‹œí•  í…œí”Œë¦¿ ì„¤ì •
     public void UpdateUI(List<GameObject> objects)
     {
-        // ListViewÀÇ itemsSource ¼³Á¤
+        // ListViewì˜ itemsSource ì„¤ì •
         List.itemsSource = objects;
 
-        // °¢ ¾ÆÀÌÅÛÀÇ °íÁ¤ ³ôÀÌ ¼³Á¤
-        List.fixedItemHeight = 1000; // ÀÌ ³ôÀÌ´Â ÀüÃ¼ ¾ÆÀÌÅÛÀÇ ³ôÀÌÀÔ´Ï´Ù.
+        // ê° ì•„ì´í…œì˜ ê³ ì • ë†’ì´ ì„¤ì •
+        List.fixedItemHeight = 1000; // ì´ ë†’ì´ëŠ” ì „ì²´ ì•„ì´í…œì˜ ë†’ì´ìž…ë‹ˆë‹¤.
 
-        // °¢ VisualElement »ý¼º( ¿©±â¼­ ºÎ¸ð ¿¤¸®¸ÕÆ® ÀÚ½Ä ¿¤¸®¸ÕÆ® ¸¸µç°Ç ¸®½ºÆ®ºä¿¡ ¤¸¹ö±× ÀÖ¾î¼­ ÀÌ·±½ÄÀ¸·Î ¾ÈÇÏ¸é À§¾Æ·¡ °£°ÝÀ» ¸ø¹ú·Á¼­ ¸¸µé¾î³õÀº°Å)
+        // ê° VisualElement ìƒì„±( ì—¬ê¸°ì„œ ë¶€ëª¨ ì—˜ë¦¬ë¨¼íŠ¸ ìžì‹ ì—˜ë¦¬ë¨¼íŠ¸ ë§Œë“ ê±´ ë¦¬ìŠ¤íŠ¸ë·°ì— ã…ˆë²„ê·¸ ìžˆì–´ì„œ ì´ëŸ°ì‹ìœ¼ë¡œ ì•ˆí•˜ë©´ ìœ„ì•„ëž˜ ê°„ê²©ì„ ëª»ë²Œë ¤ì„œ ë§Œë“¤ì–´ë†“ì€ê±°)
         List.makeItem = () =>
         {
-            // ºÎ¸ð VisualElement »ý¼º
+            // ë¶€ëª¨ VisualElement ìƒì„±
             var parentElement = new VisualElement();
 
-            // ÀÚ½Ä VisualElement »ý¼º
+            // ìžì‹ VisualElement ìƒì„±
             var childElement = new VisualElement();
-
-            // ºÎ¸ð¿¡ ÀÚ½Ä Ãß°¡
+// ë¶€ëª¨ì— ìžì‹ ì¶”ê°€
             parentElement.Add(childElement);
 
-            // Å©±â ¼³Á¤
-            childElement.style.height = 700; // ÀÚ½ÄÀÇ ³ôÀÌ ¼³Á¤
-            childElement.style.width = Length.Percent(80); // ÁÂ¿ì ÆøÀ» ºÎ¸ðÀÇ 80%·Î
-            childElement.style.marginTop = Length.Percent(10); // À§¿¡ 10ÆÛ ÆøÁØ°Å
-            childElement.style.marginBottom = Length.Percent(10);// ¾Æ·¡¿¡ 10ÆÛ ÆøÁØ°Å
-            childElement.style.marginLeft = Length.Percent(10); // ¿·¿¡ 10ÆÛ ÆøÁØ°Å
-            childElement.style.marginRight = Length.Percent(10); // ¿·¿¡ 10ÆÛ ÆøÁØ°Å
+            // í¬ê¸° ì„¤ì •
+            childElement.style.height = 700; // ìžì‹ì˜ ë†’ì´ ì„¤ì •
+            childElement.style.width = Length.Percent(80); // ì¢Œìš° í­ì„ ë¶€ëª¨ì˜ 80%ë¡œ
+            childElement.style.marginTop = Length.Percent(10); // ìœ„ì— 10í¼ í­ì¤€ê±°
+            childElement.style.marginBottom = Length.Percent(10);// ì•„ëž˜ì— 10í¼ í­ì¤€ê±°
+            childElement.style.marginLeft = Length.Percent(10); // ì˜†ì— 10í¼ í­ì¤€ê±°
+            childElement.style.marginRight = Length.Percent(10); // ì˜†ì— 10í¼ í­ì¤€ê±°
 
-            // Å×µÎ¸® ¼³Á¤ (¾ãÀº °ËÁ¤»ö Å×µÎ¸®)
+            // í…Œë‘ë¦¬ ì„¤ì • (ì–‡ì€ ê²€ì •ìƒ‰ í…Œë‘ë¦¬)
             childElement.style.borderTopWidth = 10;
             childElement.style.borderBottomWidth = 10;
             childElement.style.borderLeftWidth = 10;
@@ -64,35 +64,31 @@ public class ListUI : UIManager
             childElement.style.borderLeftColor = Color.black;
             childElement.style.borderRightColor = Color.black;
 
-            // ¹è°æ »ö»ó ¼³Á¤
+            // ë°°ê²½ ìƒ‰ìƒ ì„¤ì •
             childElement.style.backgroundColor = new Color(111f / 255f, 168f / 255f, 243f / 255f);
 
-            // ·¹ÀÌ¾Æ¿ô ¼³Á¤
+            // ë ˆì´ì•„ì›ƒ ì„¤ì •
             childElement.style.flexDirection = FlexDirection.Column;
 
-            return parentElement; // ºÎ¸ð ¿ä¼Ò¸¦ ¹ÝÈ¯
+            return parentElement; // ë¶€ëª¨ ìš”ì†Œë¥¼ ë°˜í™˜
         };
-
-        // °¢ VisualElement¿¡ µ¥ÀÌÅÍ¸¦ ¹ÙÀÎµù(¿©±â¿¡¼­ ÀúÀåÇÑ ¿ÀºêÁ§Æ®µéÀ» ºÒ·¯¿Í¼­ childElement.add(¹¹½Ã±â) ÇØ¼­ ³ÖÀ¸¸é µÊ)
+// ê° VisualElementì— ë°ì´í„°ë¥¼ ë°”ì¸ë”©(ì—¬ê¸°ì—ì„œ ì €ìž¥í•œ ì˜¤ë¸Œì íŠ¸ë“¤ì„ ë¶ˆëŸ¬ì™€ì„œ childElement.add(ë­ì‹œê¸°) í•´ì„œ ë„£ìœ¼ë©´ ë¨)
         List.bindItem = (element, i) =>
         {
             var parentElement = element as VisualElement; 
-            var childElement = parentElement.ElementAt(0) as VisualElement; // Ã¹ ¹øÂ° ÀÚ½Ä ¿ä¼Ò °¡Á®¿À±â
+            var childElement = parentElement.ElementAt(0) as VisualElement; // ì²« ë²ˆì§¸ ìžì‹ ìš”ì†Œ ê°€ì ¸ì˜¤ê¸°
 
-            childElement.Clear(); // ¸®½ºÆ®ÀÇ ³»¿ëÀÌ ¾÷µ¥ÀÌÆ® µÉ¶§ ÀÌÀü³»¿ëÀÌ Áö¿öÁö°Ô ¸¸µé¾î³õÀº°Çµ¥ ÇÊ¿ä¾ø°Å³ª ¼öÁ¤ÇÊ¿äÇÏ¸é Áö¿ì¸éµÉµí
+            childElement.Clear(); // ë¦¬ìŠ¤íŠ¸ì˜ ë‚´ìš©ì´ ì—…ë°ì´íŠ¸ ë ë•Œ ì´ì „ë‚´ìš©ì´ ì§€ì›Œì§€ê²Œ ë§Œë“¤ì–´ë†“ì€ê±´ë° í•„ìš”ì—†ê±°ë‚˜ ìˆ˜ì •í•„ìš”í•˜ë©´ ì§€ìš°ë©´ë ë“¯
 
-            // (¿ÀºêÁ§Æ® ÀÌ¸§À» ¶óº§·Î Ãß°¡(ÀÌ°Å´Â Á÷°ü¼ºÀÖ°Ô ¹¹ÇÏ´ÂÁö º¸¿©ÁÙ·Á°í ÀÏ´Ü ³Ö¾î³õÀº°Å¶ó ¿ÀºêÁ§Æ® Ã£¾Æ¼­ °¡Á®¿Ã ¼ö ÀÖÀ¸¸é ´Ù½Ã »èÁ¦ ½ÃÄÑµµ µÊ)
+            // (ì˜¤ë¸Œì íŠ¸ ì´ë¦„ì„ ë¼ë²¨ë¡œ ì¶”ê°€(ì´ê±°ëŠ” ì§ê´€ì„±ìžˆê²Œ ë­í•˜ëŠ”ì§€ ë³´ì—¬ì¤„ë ¤ê³  ì¼ë‹¨ ë„£ì–´ë†“ì€ê±°ë¼ ì˜¤ë¸Œì íŠ¸ ì°¾ì•„ì„œ ê°€ì ¸ì˜¬ ìˆ˜ ìžˆìœ¼ë©´ ë‹¤ì‹œ ì‚­ì œ ì‹œì¼œë„ ë¨)
             var label = new Label(objects[i].name);
-            childElement.Add(label); // ¶óº§À» ÀÚ½Ä ¿ä¼Ò¿¡ Ãß°¡
+            childElement.Add(label); // ë¼ë²¨ì„ ìžì‹ ìš”ì†Œì— ì¶”ê°€
 
-            // ÇÊ¿äÇÏ¸é ¹¹ ´õ Ãß°¡ÇÏ¸é µÉµí?
+            // í•„ìš”í•˜ë©´ ë­ ë” ì¶”ê°€í•˜ë©´ ë ë“¯?
         };
 
-        // ¸®½ºÆ®ºä¸¦ ´Ù½Ã ±×¸®µµ·Ï °­Á¦
+        // ë¦¬ìŠ¤íŠ¸ë·°ë¥¼ ë‹¤ì‹œ ê·¸ë¦¬ë„ë¡ ê°•ì œ
         List.RefreshItems();
     }
 
 }
-
-
-

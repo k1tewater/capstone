@@ -7,6 +7,7 @@ public class CameraUI : UIManager
 {
     APICaller apiCaller;
     VisualElement cameraScreen, alarmCamera, alarmSavedName;
+    TextField inputTextField;
     ProgressBar cameraBar;
     Texture2D texture;
     protected override void Awake()
@@ -19,6 +20,7 @@ public class CameraUI : UIManager
         apiCaller = new APICaller();
         alarmCamera = document.rootVisualElement.Q<VisualElement>("AlarmCamera");
         alarmSavedName = document.rootVisualElement.Q<VisualElement>("AlarmSavedName");
+        inputTextField = document.rootVisualElement.Q<TextField>("InputTextField");
         cameraScreen = document.rootVisualElement.Q<VisualElement>("CameraScreen");
         cameraBar = document.rootVisualElement.Q<ProgressBar>("CameraBar");
 
@@ -40,19 +42,61 @@ public class CameraUI : UIManager
     }
     void ClickCapture(ClickEvent evt)
     {
-        Debug.Log("Capture clicked");
-
         NativeCamera.TakePicture(callback, 2048, true, NativeCamera.PreferredCamera.Front);
     }
 
     void ClickReupload(ClickEvent evt)
     {
+        StopCoroutine(apiCaller.ImageTo(texture, cameraBar));
+        cameraBar.title = "Task Stopped.";
+        cameraBar.value = 0f;
+        isRunningAPI = false;
 
+        GetButton("Capture").style.display = DisplayStyle.Flex;
+        GetButton("Reupload").style.display = DisplayStyle.None;
+        GetButton("Save").style.display = DisplayStyle.None;
     }
 
     void ClickSave(ClickEvent evt)
     {
         alarmSavedName.style.display = DisplayStyle.Flex;
+    }
+
+    void ClickSaveConfirm(ClickEvent evt)
+    {
+        objectManager.SaveObjectFile(inputTextField.text);
+        alarmSavedName.style.display = DisplayStyle.None;
+
+        cameraBar.title = $"{inputTextField.text}3D.obj, .mtl, .png are saved";
+    }
+
+    void ClickYes(ClickEvent evt)
+    {
+        StartCoroutine(apiCaller.ImageTo(texture, cameraBar));
+        cameraBar.style.display = DisplayStyle.Flex;
+        isRunningAPI = true;
+
+        alarmCamera.style.display = DisplayStyle.None;
+        GetButton("Capture").style.display = DisplayStyle.None;
+        GetButton("Reupload").style.display = DisplayStyle.Flex;
+        GetButton("Save").style.display = DisplayStyle.Flex;
+    }
+
+    void ClickNo(ClickEvent evt)
+    {
+        // fileScreen에서 이미지를 제거하고 초기화
+        cameraScreen.style.backgroundImage = null;
+        texture = null;
+
+        // 확인 창 숨기기
+        alarmCamera.style.display = DisplayStyle.None;
+
+        Debug.Log("이미지 삭제됨.");
+    }
+
+    void ClickCancel(ClickEvent evt)
+    {
+        alarmSavedName.style.display = DisplayStyle.None;
     }
     private void callback(string path)
     {
@@ -73,38 +117,5 @@ public class CameraUI : UIManager
             alarmCamera.style.display = DisplayStyle.Flex;
         } 
     }
-    void ClickYes(ClickEvent evt)
-    {
-        StartCoroutine(apiCaller.ImageTo(texture, cameraBar));
-        cameraBar.style.display = DisplayStyle.Flex;
-        isRunningAPI = true;
 
-        // 확인 창 숨기기
-        alarmCamera.style.display = DisplayStyle.None;
-
-        GetButton("Capture").style.display = DisplayStyle.None;
-        GetButton("Reupload").style.display = DisplayStyle.Flex;
-        GetButton("Save").style.display = DisplayStyle.Flex;
-    }
-
-    void ClickNo(ClickEvent evt)
-    {
-        // fileScreen에서 이미지를 제거하고 초기화
-        cameraScreen.style.backgroundImage = null;
-        texture = null;
-
-        // 확인 창 숨기기
-        alarmCamera.style.display = DisplayStyle.None;
-
-        Debug.Log("이미지 삭제됨.");
-    }
-    void ClickSaveConfirm(ClickEvent evt)
-    {
-
-    }
-
-    void ClickCancel(ClickEvent evt)
-    {
-        alarmSavedName.style.display = DisplayStyle.None;
-    }
 }

@@ -3,14 +3,12 @@ using UnityEngine.UIElements;
 
 public class MainUI : UIManager
 {
-    
     protected override void Awake()
     {
-        buttonNames = new string[] { "Imageto", "Textto", "List" };
-        clickEvts = new EventCallback<ClickEvent>[] { ClickImageTo, ClickTextTo, ClickList };
+        buttonNames = new string[] { "Imageto", "Textto" };
+        clickEvts = new EventCallback<ClickEvent>[] { ClickImageTo, ClickTextTo };
         base.Awake();
         document.rootVisualElement.style.display = DisplayStyle.Flex;
-        
     }
 
     void ClickImageTo(ClickEvent evt)
@@ -24,11 +22,4 @@ public class MainUI : UIManager
         Debug.Log("text to clicked");
         SwitchUI("TextToUI");
     }
-
-    void ClickList(ClickEvent evt)
-    {
-        Debug.Log("list clicked");
-        SwitchUI("ListUI");
-    }
-
 }

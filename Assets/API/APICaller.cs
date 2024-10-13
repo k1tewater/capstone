@@ -6,7 +6,7 @@ using GLTFast;
 using UnityEngine.UIElements;
 public class APICaller
 {
-    private const string apiKey = "tsk_bYdKE9lIq14RjQQVrVO26lPn68GaHr8E4hEy2Tja67g";
+    private const string apiKey = "tsk_P3dBnYm1LIih3LvzYr82Aq6uTpg4u-0J9jpYYDQOImi";
     private const string url = "https://api.tripo3d.ai/v2/openapi/task";
     private const string uploadUrl = "https://api.tripo3d.ai/v2/openapi/upload";
     UnityWebRequest www;

@@ -1,6 +1,3 @@
-using System.IO;
-using System.Text;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class TextToUI : UIManager
@@ -35,20 +32,26 @@ public class TextToUI : UIManager
 
     void ClickInput(ClickEvent evt)
     {
-        inputConfirmLabel.text = $"Prompt : {inputTextField.text}\nDo you want create a model with this value?";
+        inputConfirmLabel.text = $"Prompt : {inputTextField.text}\nDo you want create a model\n with this value?";
         confirmVisualElement.style.display = DisplayStyle.Flex;
     }
 
     void ClickReupload(ClickEvent evt)
     {
+        StopCoroutine(apiCaller.TextTo(inputTextField.text, textToBar));
+        textToBar.title = "Task Stopped.";
+        textToBar.value = 0f;
+        isRunningAPI = false;
 
+        inputConfirmLabel.text = $"Prompt : {inputTextField.text}\nDo you want create a model\n with this value?";
+        confirmVisualElement.style.display = DisplayStyle.Flex;
     }
 
      void ClickSave(ClickEvent evt)
     {
-        objectManager.SaveObject(inputTextField.text);
+        objectManager.SaveObjectFile(inputTextField.text);
+        textToBar.title = $"{inputTextField.text}3D.obj, .mtl, .png are saved";
     }
-
 
     void ClickYes(ClickEvent evt)
     {
@@ -67,5 +70,4 @@ public class TextToUI : UIManager
     {
         confirmVisualElement.style.display = DisplayStyle.None;
     }
-
 }
